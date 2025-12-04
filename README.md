@@ -44,3 +44,5 @@ Official Lua versions can also be used as long as the Makefile is edited.
 
 * Read Wiki for documents https://github.com/cloudwu/skynet/wiki (Written in both English and Chinese)
 * The FAQ in wiki https://github.com/cloudwu/skynet/wiki/FAQ (In Chinese, but you can visit them using something like Google or Deepl translate.)
+
+这是一个使用skynet实现的slg游戏服务器demo,未实际完成，用于学习skynet的设计思路
