@@ -1,0 +1,181 @@
+CREATE DATABASE skynet CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+--创建用户表
+CREATE TABLE users (
+    user_id BIGINT PRIMARY KEY,
+    username VARCHAR(64),
+    email VARCHAR(128),
+    password VARCHAR(128),
+    phone VARCHAR(16),
+    ip VARCHAR(32),
+    last_login VARCHAR(64)
+);
+
+--创建登录日志表
+CREATE TABLE login_log (
+    log_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
+    login_time VARCHAR(64),
+    ip VARCHAR(32)
+);
+
+-- 创建游戏授权表,记录玩家在不同游戏的uuid
+CREATE TABLE game_auth (
+    user_id BIGINT,
+    game_id VARCHAR(64),
+    uuid VARCHAR(128),
+    PRIMARY KEY (user_id, game_id)
+);
+
+
+--创建玩家城市表
+CREATE TABLE user_city (
+    uuid BIGINT PRIMARY KEY,
+    name VARCHAR(64),
+    level INT,
+    power INT,
+);
+--创建玩家资源表
+CREATE TABLE user_resource (
+    uuid BIGINT PRIMARY KEY,
+    wood INT,
+    food INT,
+    stone INT,
+    iron INT
+);
+-- 创建资源变动日志表
+CREATE TABLE resource_log (
+    log_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    uuid BIGINT,
+    change_type VARCHAR(64),
+    wood INT,
+    food INT,
+    stone INT,
+    iron INT,
+    timestamp VARCHAR(64)
+);
+
+-- 创建玩家建筑表
+CREATE TABLE user_building (
+    building_id INT PRIMARY KEY,
+    user_id BIGINT,
+    level INT,
+    status VARCHAR(64)
+);
+
+-- 创建建筑升级日志表
+CREATE TABLE building_log (
+    log_id BIGINT PRIMARY KEY,
+    user_id BIGINT,
+    building_id INT,
+    old_level INT,
+    new_level INT,
+    timestamp VARCHAR(64)
+);
+
+-- 玩家升级任务表
+CREATE TABLE building_queue (
+    task_id BIGINT PRIMARY KEY,
+    user_id BIGINT,
+    building_id INT,
+    start_time VARCHAR(64)
+    
+);
+--生产任务表
+CREATE TABLE production (
+    task_id BIGINT PRIMARY KEY,
+    user_id BIGINT,
+    building_id INT,
+    soldier_type VARCHAR(64),
+    amount INT,
+    start_time VARCHAR(64)
+);
+
+-- 玩家军队表
+CREATE TABLE user_army (
+    user_id     BIGINT NOT NULL,
+    unit_type   VARCHAR(32) NOT NULL,   -- 兵种类型: infantry/cavalry/archer
+    unit_level  INT NOT NULL,           -- 等级
+    quantity    INT NOT NULL,           -- 数量
+    PRIMARY KEY (user_id, unit_type, unit_level)
+);
+
+-- 创建军队变动日志表
+CREATE TABLE army_log (
+    log_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
+    change_type VARCHAR(64),
+    infantry INT,
+    cavalry INT,
+    archers INT,
+    timestamp VARCHAR(64)
+);
+-- 创建玩家科技表
+CREATE TABLE user_tech (
+    user_id BIGINT PRIMARY KEY,
+    tech_id INT,
+    tech_level INT,
+    unlock boolean
+);
+-- 创建科技升级日志表
+CREATE TABLE tech_log (
+    log_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
+    tech_id INT,
+    old_level INT,
+    new_level INT,
+    change_type VARCHAR(64),
+    timestamp VARCHAR(64)
+);
+-- 创建玩家编队表
+CREATE TABLE user_formation (
+    formation_id BIGINT PRIMARY KEY,
+    user_id BIGINT,
+    soldier_type VARCHAR(32),
+    soldier_level INT,
+    quantity INT,
+);
+
+
+-- 创建 城市的外观表
+CREATE TABLE city_appearance (
+    city_id BIGINT NOT NULL,
+    appearance_type VARCHAR(32), -- army / building / theme / decoration
+    appearance_id INT,
+    PRIMARY KEY (city_id, appearance_type)
+);
+
+
+-- 创建联盟表
+CREATE TABLE alliances (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(64),
+    level INT,
+    leader_id BIGINT,
+    member_count INT,
+    creation_date VARCHAR(64)
+);
+-- 创建联盟成员表
+CREATE TABLE alliance_members (
+    id BIGINT,
+    user_id BIGINT,
+    name VARCHAR(64),
+    role VARCHAR(32), -- leader / officer / member
+    join_date VARCHAR(64),
+    PRIMARY KEY (id, user_id)
+);
+-- 创建联盟申请表
+CREATE TABLE alliance_applications (
+    application_id BIGINT PRIMARY KEY ,
+    id BIGINT,
+    user_id BIGINT,
+    name VARCHAR(64),
+);
+-- 联盟互助任务表
+CREATE TABLE alliance_aid_tasks (
+    task_id BIGINT PRIMARY KEY,
+    id BIGINT,
+    task_id INT,
+    helper_ids VARCHAR(256) -- 以逗号分隔的用户ID列表
+);
